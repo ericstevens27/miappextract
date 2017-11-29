@@ -1,0 +1,15 @@
+{
+  "root": ".",
+  "images": ".",
+  "data": ".",
+  "links": "linklist-test.json",
+  "link1": "linklist-20171017.json",
+  "link2": "linklist-20171116.json",
+  "compareoutput": "linkcompare-20171116.json",
+  "mount": "tmp",
+  "extractimages": ".",
+  "extractprops": ".",
+  "xmonly": true,
+  "model": "modellist-test.json",
+  "output": "allprops.json"
+}

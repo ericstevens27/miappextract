@@ -1,0 +1,8 @@
+{
+  "root": ".",
+  "data": "",
+  "urlout": "urllist.json",
+  "baseurl": "http://app.mi.com/download/{}",
+  "appurl": "http://app.mi.com/hotCatApp/12",
+  "appdetailsbaseurl": "http://app.mi.com/details?id={}"
+}
