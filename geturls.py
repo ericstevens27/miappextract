@@ -53,12 +53,12 @@ def main():
                 lisoup = BeautifulSoup(str(child), 'html.parser')
                 linkdata = lisoup.find_all('a')
                 packagename = extractgroup(re.search(re_hrefid, linkdata[1].get('href')))
+                desc = linkdata[1].text
                 imgdata = lisoup.find_all('img')
                 src = imgdata[0].get('data-src')
-                desc = imgdata[0].get('alt')
                 msg.DEBUG("I found package {} ({}) with icon url of {}".format(packagename, desc, src))
                 packagedata[packagename] = {'description': desc, 'iconurl': src}
-
+    pkgcount = 0
     for pkgkey in packagedata:
         # go pull each page for each package
         detailsURL = arg.Flags.configsettings['appdetailsbaseurl'].format(pkgkey)
@@ -75,6 +75,15 @@ def main():
                 directURL = geturl(appid)
                 msg.DEBUG("I found {} for package {} and direct url of {}".format(appid, pkgkey, directURL))
                 packagedata[pkgkey].update({'appid': appid, 'directurl': directURL})
+                pkgcount += 1
+                if arg.Flags.verbose:
+                    arg.displaycounter(["Processing application"], [pkgcount])
+                if arg.Flags.test:
+                    # if in test mode, stop and just write this one item
+                    foundmatch = True
+                    break
+        if foundmatch:
+            break
 
     writefile.data = packagedata
     writefile.writeoutput()

@@ -95,3 +95,11 @@ class MSG:
         if Flags.test:
             print('[TEST]', msg)
 
+def displaycounter(message: list, count: list):
+    '''provides a pretty counter style display for things like records processed'''
+    display = "\r"
+    for m in message:
+        # print (message.index(m))
+        display = display + m + " {" + str(message.index(m)) + ":,d} "
+        # print (display)
+    print(display.format(*count), end='')

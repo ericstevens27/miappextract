@@ -100,10 +100,10 @@ class WriteJson:
         """write the build props to the json file"""
         json_file = os.path.join(self.root_path, self.data_path, self.json)
         try:
-            json_fh = open(json_file, "w")
+            json_fh = open(json_file, "w", encoding='utf-8')
         except IOError as err:
             print(ERROR, "Failed to open output file", json_file)
             print(ERROR, err.errno, err.filename, err.strerror)
             sys.exit(1)
-        json.dump(self.data, json_fh, indent=4)
+        json.dump(self.data, json_fh, indent=4, ensure_ascii=False)
         json_fh.close()
