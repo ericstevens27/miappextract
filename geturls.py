@@ -20,16 +20,24 @@ def main():
     do.processargs()
     msg.TEST("Running in test mode. Using http://app.mi.com/hotCatApp/12")
     # msg.DEBUG(do)
+    # Flip appref list for easier usage
+    appnumlist = {}
+    for k, n in arg.Flags.configsettings['applistref'].items():
+        appnumlist.update({n: k})
 
+    if arg.Flags.appid:
+        appnum = arg.Flags.appid
+    else:
+        appnum = arg.Flags.configsettings['applistnumber']
+    if arg.Flags.test:
+        appnum = "12"
     writefile = rb.WriteJson(arg.Flags.configsettings['root'], arg.Flags.configsettings['data'],
-                             arg.Flags.configsettings['urlout'])
+                             arg.Flags.configsettings['urlout'].format(appnum))
+    appURL = arg.Flags.configsettings['appurlbase'].format(appnum)
+    msg.VERBOSE("Processing {} ({})".format(appURL, appnumlist[appnum]))
     foundmatch = False
 
     http = httplib2.Http()
-    if arg.Flags.test:
-        appURL = "http://app.mi.com/hotCatApp/12"
-    else:
-        appURL = arg.Flags.configsettings['appurl']
     status, response = http.request(appURL)
     soup = BeautifulSoup(response, 'html.parser')
 
@@ -42,6 +50,8 @@ def main():
     packagedata = {}
     #
     data = soup.find_all("ul")
+    apprec = 0
+    msg.VERBOSE("Starting Processing")
     for e in data:
         divcheck = extractgroup(re.search(re_applist, str(e)))
         if divcheck is not None:
@@ -58,6 +68,10 @@ def main():
                 src = imgdata[0].get('data-src')
                 msg.DEBUG("I found package {} ({}) with icon url of {}".format(packagename, desc, src))
                 packagedata[packagename] = {'description': desc, 'iconurl': src}
+                apprec += 1
+                if arg.Flags.verbose:
+                    arg.displaycounter(["Pulling application"], [apprec])
+
     pkgcount = 0
     for pkgkey in packagedata:
         # go pull each page for each package
@@ -77,10 +91,11 @@ def main():
                 packagedata[pkgkey].update({'appid': appid, 'directurl': directURL})
                 pkgcount += 1
                 if arg.Flags.verbose:
-                    arg.displaycounter(["Processing application"], [pkgcount])
+                    arg.displaycounter(["Processing redirection URL", "of"], [pkgcount, apprec])
                 if arg.Flags.test:
                     # if in test mode, stop and just write this one item
                     foundmatch = True
+                    msg.TEST("Aborting processing")
                     break
         if foundmatch:
             break

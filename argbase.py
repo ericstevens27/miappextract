@@ -46,7 +46,7 @@ class MyArgs:
         parser.add_option("-f", "--force", dest="force", action="store_true", default=False,
                           help="Force processing")
         parser.add_option("-a", "--appid", dest="appid", default=None,
-                          help="Xiaomi App Id Number to check", metavar="APPID")
+                          help="Xiaomi App Id or App list Number to check", metavar="APPID")
         parser.add_option("-c", "--config", dest="config", default=None,
                           help="Configuration file (JSON)", metavar="CONFIG")
 
