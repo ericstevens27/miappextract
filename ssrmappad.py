@@ -141,10 +141,11 @@ class SSRMApi:
             msg.VERBOSE("Logout Successful [HTTP Response: {}]".format(r.status_code))
         rj = json.loads(r.content.decode('utf-8'))
 
-    def listappads(self, name: str):
+    def listappads(self, name: str, field: str):
         actionURL = self.ssrm + "app-ads?offset=0&limit=10"
         if name is not None:
-            actionURL = actionURL + "&filter={}&filterField=adName".format(name)
+            actionURL = actionURL + "&filter={}&filterField={}".format(name, field)
+            msg.VERBOSE("Searching for {} in {}".format(name, field))
         header = {'content-type': 'application/json', 'X-XSRF-TOKEN': self.xsrf_token}
         msg.DEBUG("\n\tURL: {}\n\tHeaders: {}".format(actionURL, header))
         msg.VERBOSE("Getting List of App Ads")
@@ -155,9 +156,8 @@ class SSRMApi:
             else:
                 msg.VERBOSE("Bad request (invalid JSON) [HTTP Response: {}]".format(r.status_code))
         else:
-            msg.VERBOSE("Get Session Info successful [HTTP Response: {}]".format(r.status_code))
+            msg.VERBOSE("Get List of Ads successful [HTTP Response: {}]".format(r.status_code))
         rj = json.loads(r.content.decode('utf-8'))
-        msg.DEBUG("Ad list is\n{}".format(rj))
         return rj
 
     def makeappad(self, pname, pdet):
@@ -211,13 +211,13 @@ def main():
     ad = SSRMApi("admin", "Apple1995!", "https://ssrm-dev.securespaces.net")
     ad.gettoken()
     ad.getsession()
-    # adlist = ad.listappads('WeChat')
-    # print("Count of ads: {}".format(adlist['count']))
-    # for a in adlist['items']:
-    #     print(json.dumps(a, indent=4, ensure_ascii=False))
+    adlist = ad.listappads('com.v.study', 'packageName')
+    print("Count of ads: {}".format(adlist['count']))
+    for a in adlist['items']:
+        print(json.dumps(a, indent=4, ensure_ascii=False))
 
-    for pgkname in rd.data:
-        ad.makeappad(pgkname, rd.data[pgkname])
+    # for pgkname in rd.data:
+    #     ad.makeappad(pgkname, rd.data[pgkname])
 
     ad.logoutsession()
 

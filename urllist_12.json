@@ -1,0 +1,182 @@
+{
+    "com.v.study": {
+        "description": "互动作业",
+        "iconurl": "http://file.market.xiaomi.com/thumbnail/PNG/l62/AppStore/03288443e6a195ecb4c945bc35a17e486a1429906",
+        "appid": "54221",
+        "directurl": "http://f2.market.xiaomi.com/download/AppStore/0a01394fdac4e4a9a3b828742970abb796975eca9/com.v.study.apk"
+    },
+    "com.duia.duiaapp": {
+        "description": "对啊课堂",
+        "iconurl": "http://file.market.xiaomi.com/thumbnail/PNG/l62/AppStore/0646145eb366c4f071979437f6d4ab16b2615d131",
+        "appid": "86126",
+        "directurl": "http://f1.market.xiaomi.com/download/AppStore/0065ea4aa1d974bf0114bb067fca2a1c91889bd3f/com.duia.duiaapp.apk"
+    },
+    "say.whatever": {
+        "description": "随便说",
+        "iconurl": "http://file.market.xiaomi.com/thumbnail/PNG/l62/AppStore/08ea154b8769ef4e1f56959cabc6409bddf4152d5",
+        "appid": "505065",
+        "directurl": "http://f2.market.xiaomi.com/download/AppStore/0d115452d6afdb6fb3435a71d4e50b998d14389a7/say.whatever.apk"
+    },
+    "com.sinyee.babybus.cube": {
+        "description": "宝宝敲方块",
+        "iconurl": "http://file.market.xiaomi.com/thumbnail/PNG/l62/AppStore/0a83d545e914157f8bcecd3ef018e22689b4137fd",
+        "appid": "102505",
+        "directurl": "http://f2.market.xiaomi.com/download/AppStore/0e55e54631214fddaf0bf13c2d999e35217411d5a/com.sinyee.babybus.cube.apk"
+    },
+    "com.sinyee.babybus.cake": {
+        "description": "奇妙蛋糕店",
+        "iconurl": "http://file.market.xiaomi.com/thumbnail/PNG/l62/AppStore/0130f34af5cf745aa0360500432869ff04afc3695",
+        "appid": "461433",
+        "directurl": "http://f4.market.mi-img.com/download/AppStore/085815034387d59fbd8aac8c5d9ac4436c742a33d/com.sinyee.babybus.cake.apk"
+    },
+    "com.lzzs.lzzsapp": {
+        "description": "应聘宝应届生招聘",
+        "iconurl": "http://file.market.xiaomi.com/thumbnail/PNG/l62/AppStore/0e1d204147abe467f2094feb33a1ff19709285067",
+        "appid": "75316",
+        "directurl": "http://f1.market.xiaomi.com/download/AppStore/00742a4c5ba20408c3e72325a22fe198d02901682/com.lzzs.lzzsapp.apk"
+    },
+    "com.tencent.k12": {
+        "description": "企鹅辅导",
+        "iconurl": "http://file.market.xiaomi.com/thumbnail/PNG/l62/AppStore/0651e84c8457045050f6683de3549315de817a1a8",
+        "appid": "422233",
+        "directurl": "http://f4.market.xiaomi.com/download/AppStore/06291341c6faf41c609a6561eeb78858e0db55327/com.tencent.k12.apk"
+    },
+    "com.jiongji.andriod.card": {
+        "description": "百词斩",
+        "iconurl": "http://file.market.xiaomi.com/thumbnail/PNG/l62/AppStore/02a5a5bc55ab2c1ab989cb49a1d599d92df412ca6",
+        "appid": "668",
+        "directurl": "http://f1.market.xiaomi.com/download/AppStore/0697e85641cc145300de7c3ec6a96eb52b22834ae/com.jiongji.andriod.card.apk"
+    },
+    "com.enhance.kmf.words.wordsapplication": {
+        "description": "考满分词汇",
+        "iconurl": "http://file.market.xiaomi.com/thumbnail/PNG/l62/AppStore/058765715be5718f79892f1279c6257cd7140352f",
+        "appid": "445438",
+        "directurl": "http://f2.market.xiaomi.com/download/AppStore/0ea26538effb23e14fb8cd3c717db3be24842842a/com.enhance.kmf.words.wordsapplication.apk"
+    },
+    "com.kingsoft": {
+        "description": "金山词霸",
+        "iconurl": "http://file.market.xiaomi.com/thumbnail/PNG/l62/AppStore/02da8d4c83c7349d30a48eeaf052b1c18d577d84d",
+        "appid": "1047",
+        "directurl": "http://f4.market.xiaomi.com/download/AppStore/0520a409a678882ac032d33e32703a98311402576/com.kingsoft.apk"
+    },
+    "com.koolearn.english.supermarket": {
+        "description": "宝贝学购物多纳",
+        "iconurl": "http://file.market.xiaomi.com/thumbnail/PNG/l62/AppStore/0b95e5a243e5ac77046af11ee4a4a981da640bcc5",
+        "appid": "55755",
+        "directurl": "http://f5.market.xiaomi.com/download/AppStore/02057d589bf2847f9131a81694ae737baad6d565c/com.koolearn.english.supermarket.apk"
+    },
+    "com.wd100.erge": {
+        "description": "启慧宝宝",
+        "iconurl": "http://file.market.xiaomi.com/thumbnail/PNG/l62/AppStore/0ebcc4d322cda67ca78e5d19ada9d71341e432291",
+        "appid": "461197",
+        "directurl": "http://f3.market.xiaomi.com/download/AppStore/010b4a53b23cd4de605b7ac4df48c242ac7083b76/com.wd100.erge.apk"
+    },
+    "com.xiaobanlong.main": {
+        "description": "小伴龙",
+        "iconurl": "http://file.market.xiaomi.com/thumbnail/PNG/l62/AppStore/01abe4a2a34411559bc8f0b8b8fbc43d57d401ff0",
+        "appid": "12389",
+        "directurl": "http://f4.market.mi-img.com/download/AppStore/04f49409e211609c9294162342d2aad9f15410aba/com.xiaobanlong.main.apk"
+    },
+    "com.A17zuoye.mobile.homework": {
+        "description": "一起作业学生",
+        "iconurl": "http://file.market.xiaomi.com/thumbnail/PNG/l62/AppStore/04dc945539a0e2d09551aeee2813b4957744008dd",
+        "appid": "111024",
+        "directurl": "http://f3.market.xiaomi.com/download/AppStore/0cded5843e1837b2f92fb7d26d6c9a50d13414441/com.A17zuoye.mobile.homework.apk"
+    },
+    "com.ted.android": {
+        "description": "TED",
+        "iconurl": "http://file.market.xiaomi.com/thumbnail/PNG/l62/AppStore/02ad045fd9fae24907cfc35251bb1dd177941e519",
+        "appid": "1991",
+        "directurl": "http://f2.market.xiaomi.com/download/AppStore/0498b7446295e46fd174af0353cc324112844de1b/com.ted.android.apk"
+    },
+    "com.tataera.radio": {
+        "description": "英语听力广播电台",
+        "iconurl": "http://file.market.xiaomi.com/thumbnail/PNG/l62/AppStore/0321ab5bc9dec45d60bd3756af8c9680c7e2fbea4",
+        "appid": "397768",
+        "directurl": "http://f5.market.mi-img.com/download/AppStore/07f0ce4c84ba74596113ce89348b0ddab710070f2/com.tataera.radio.apk"
+    },
+    "com.lhyy.childrenhamburger": {
+        "description": "烹饪-美食专家",
+        "iconurl": "http://file.market.xiaomi.com/thumbnail/PNG/l62/AppStore/0ab2904960dd944971b6b79011d3fe8c23b311ee0",
+        "appid": "433258",
+        "directurl": "http://f3.market.xiaomi.com/download/AppStore/06523530e5e01fb667b84a0dc718bd7dd5043c2a4/com.lhyy.childrenhamburger.apk"
+    },
+    "com.knowbox.rc.student.pk": {
+        "description": "作业盒子小学学生",
+        "iconurl": "http://file.market.xiaomi.com/thumbnail/PNG/l62/AppStore/0ebc85680ea1b1ea96b011f0da3832d77e940ee2f",
+        "appid": "86385",
+        "directurl": "http://f1.market.xiaomi.com/download/AppStore/04f34a4b1bb2c495f0b469d9eae9da7c930426ed6/com.knowbox.rc.student.pk.apk"
+    },
+    "com.mainbo.homeschool": {
+        "description": "一起教",
+        "iconurl": "http://file.market.xiaomi.com/thumbnail/PNG/l62/AppStore/0c5164bd3a026208478eee21ac0f36f0d7641a2f0",
+        "appid": "75328",
+        "directurl": "http://f2.market.xiaomi.com/download/AppStore/0e6875cc7b933ab21305950846cee7ccaae4178cc/com.mainbo.homeschool.apk"
+    },
+    "com.tataera.xgnyy": {
+        "description": "新概念英语",
+        "iconurl": "http://file.market.xiaomi.com/thumbnail/PNG/l62/AppStore/0f9caa5031ee84cfa07b2ad756c819a5e843a17aa",
+        "appid": "445272",
+        "directurl": "http://f2.market.xiaomi.com/download/AppStore/026d84f5283eececc9980b45e1aea7eb54a407dbf/com.tataera.xgnyy.apk"
+    },
+    "com.sinyee.babybus.abc": {
+        "description": "宝宝学ABC",
+        "iconurl": "http://file.market.xiaomi.com/thumbnail/PNG/l62/AppStore/0bae355deeb0a4ed21045978157047e4766ed92ed",
+        "appid": "3601",
+        "directurl": "http://f2.market.xiaomi.com/download/AppStore/000b84c2726a06fb3eb91fa70479540ff064368ca/com.sinyee.babybus.abc.apk"
+    },
+    "com.lft.turn": {
+        "description": "导学号",
+        "iconurl": "http://file.market.xiaomi.com/thumbnail/PNG/l62/AppStore/01c3951291087aacde4d0939ce83313697a437fbb",
+        "appid": "105653",
+        "directurl": "http://f5.market.xiaomi.com/download/AppStore/0a3f0434819a7aee3bbcc927e3a69d14ed7426713/com.lft.turn.apk"
+    },
+    "com.zhan.greword": {
+        "description": "GRE单词",
+        "iconurl": "http://file.market.xiaomi.com/thumbnail/PNG/l62/AppStore/09fb9240316684208355ff5b88043793f0465cec2",
+        "appid": "505627",
+        "directurl": "http://f4.market.mi-img.com/download/AppStore/0333535a095c94a3017b45fd46b31efb3472603f6/com.zhan.greword.apk"
+    },
+    "com.juliuxue": {
+        "description": "芥末留学",
+        "iconurl": "http://file.market.xiaomi.com/thumbnail/PNG/l62/AppStore/06b7e550367f64b6e38719515431967ad3f4a7cec",
+        "appid": "120830",
+        "directurl": "http://f2.market.xiaomi.com/download/AppStore/078e205f7342d4100352a18a69a89fefe6374f486/com.juliuxue.apk"
+    },
+    "cn.mashang.school": {
+        "description": "V校",
+        "iconurl": "http://file.market.xiaomi.com/thumbnail/PNG/l62/AppStore/0661fd4033cff4ff23bed20f4c77aa2597ad9a9fb",
+        "appid": "58012",
+        "directurl": "http://f1.market.xiaomi.com/download/AppStore/00ffd3550e7b34ffa1f7d0bf8899d65af53eb9847/cn.mashang.school.apk"
+    },
+    "com.claco.musicplayalong": {
+        "description": "伴奏王",
+        "iconurl": "http://file.market.xiaomi.com/thumbnail/PNG/l62/AppStore/019979469af3843f4197ad9d180d63b7c34a6a575",
+        "appid": "117275",
+        "directurl": "http://f4.market.xiaomi.com/download/AppStore/0358d951788d44b98072732329985a440ea8f8a98/com.claco.musicplayalong.apk"
+    },
+    "com.kerkr.kerkrstudent.kerkrstudent": {
+        "description": "课课作业",
+        "iconurl": "http://file.market.xiaomi.com/thumbnail/PNG/l62/AppStore/02b63f514f3274d1a34888b4633e2c11b22951e03",
+        "appid": "421417",
+        "directurl": "http://f5.market.xiaomi.com/download/AppStore/0ca34439d7d06e2c72019ca82d74447c11e424ef7/com.kerkr.kerkrstudent.kerkrstudent.apk"
+    },
+    "com.tataera.kouyu": {
+        "description": "塔塔英语口语",
+        "iconurl": "http://file.market.xiaomi.com/thumbnail/PNG/l62/AppStore/06b3b40f4e317d1d0db6daea8c1c61f43ce43a1cf",
+        "appid": "440495",
+        "directurl": "http://f4.market.mi-img.com/download/AppStore/05f4494b4a146490f2c4c6649228d9e2fdf34326c/com.tataera.kouyu.apk"
+    },
+    "com.tinmanarts.JoJoSherlock": {
+        "description": "叫叫识字",
+        "iconurl": "http://file.market.xiaomi.com/thumbnail/PNG/l62/AppStore/02b7a5008727868641943f6a8efc480e22540eb28",
+        "appid": "429398",
+        "directurl": "http://f2.market.xiaomi.com/download/AppStore/00ac75bd88b5ae8698e9ea0f92588b0fbf5404e42/com.tinmanarts.JoJoSherlock.apk"
+    },
+    "com.huahua.yueyu": {
+        "description": "粤语U学院-广东话",
+        "iconurl": "http://file.market.xiaomi.com/thumbnail/PNG/l62/AppStore/0b427f426acb145c91c109313235729182592e6f6",
+        "appid": "102550",
+        "directurl": "http://f2.market.xiaomi.com/download/AppStore/062834c85523773d16c165354a6f66be4cc419d57/com.huahua.yueyu.apk"
+    }
+}
