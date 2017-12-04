@@ -162,16 +162,16 @@ class SSRMApi:
 
     def makeappad(self, pname, pdet):
         self.data['adName'] = pname
-        self.data['category'] = 'Education'
-        self.data['advertiser'] = 'Spaces Mobile Technology'
+        self.data['category'] = pdet['category_en']
+        self.data['advertiser'] = pdet['company']
         self.data['packageName'] = pname
         self.data['content'][0]['title'] = pname
-        self.data['content'][0]['category'] = 'education'
+        self.data['content'][0]['category'] = pdet['category_en']
         self.data['content'][0]['description'] = pname
         self.data['content'][0]['appStoreUris'][0]['uri'] = pdet['directurl']
         self.data['content'][0]['images'][2]['imageUri'] =  pdet['iconurl']
-        self.data['content'][1]['title'] = pname + 'ZH'
-        self.data['content'][1]['category'] = 'education - ZH'
+        self.data['content'][1]['title'] = pdet['description']
+        self.data['content'][1]['category'] = pdet['category_zh']
         self.data['content'][1]['description'] = pdet['description']
         self.data['content'][1]['appStoreUris'][0]['uri'] = pdet['directurl']
         self.data['content'][1]['images'][2]['imageUri'] =  pdet['iconurl']
@@ -180,19 +180,36 @@ class SSRMApi:
 
     def pushappad(self):
         msg.VERBOSE("Pushing ad {}".format(self.data['adName']))
-        actionURL = self.ssrm + "app-ads"
-        header = {'content-type': 'application/json', 'X-XSRF-TOKEN': self.xsrf_token}
-        msg.DEBUG("\n\tURL: {}\n\tjson: {}\n\tHeaders: {}".format(actionURL, self.data, header))
-        msg.VERBOSE("Logging in")
-        r = requests.post(actionURL, json=self.data, headers=header)
-        if r.status_code != 200:
-            if r.status_code == 401:
-                msg.VERBOSE("Unauthorized Request (invalid XSRF-TOKEN) [HTTP Response: {}]".format(r.status_code))
-            else:
-                msg.VERBOSE("Bad request (invalid JSON) [HTTP Response: {}]".format(r.status_code))
+        if self.checkadexist(self.data['packageName']):
+            # TODO insert Update code here
+            msg.VERBOSE("An ad for {} exists. Skipping creation".format(self.data['packageName']))
         else:
-            msg.VERBOSE("Create successful [HTTP Response: {}]".format(r.status_code))
-            print("Create of {} sucessful, key: {}".format(self.data['adName'], r.json()['key']))
+            actionURL = self.ssrm + "app-ads"
+            header = {'content-type': 'application/json', 'X-XSRF-TOKEN': self.xsrf_token}
+            msg.DEBUG("\n\tURL: {}\n\tjson: {}\n\tHeaders: {}".format(actionURL, self.data, header))
+            msg.VERBOSE("Logging in")
+            r = requests.post(actionURL, json=self.data, headers=header)
+            if r.status_code != 200:
+                if r.status_code == 401:
+                    msg.VERBOSE("Unauthorized Request (invalid XSRF-TOKEN) [HTTP Response: {}]".format(r.status_code))
+                else:
+                    msg.VERBOSE("Bad request (invalid JSON) [HTTP Response: {}]".format(r.status_code))
+            else:
+                msg.VERBOSE("Create successful [HTTP Response: {}]".format(r.status_code))
+                print("Create of {} sucessful, key: {}".format(self.data['adName'], r.json()['key']))
+
+
+    def checkadexist(self, name: str):
+        actionURL = self.ssrm + "app-ads?offset=0&limit=10&filter={}&filterField={}".format(name, 'packageName')
+        header = {'content-type': 'application/json', 'X-XSRF-TOKEN': self.xsrf_token}
+        msg.DEBUG("Checking for ad\n\tURL: {}\n\tHeaders: {}".format(actionURL, header))
+        r = requests.get(actionURL, headers=header)
+        if r.status_code == 200:
+            return True
+        else:
+            return False
+
+
 
 
 def main():
@@ -211,13 +228,14 @@ def main():
     ad = SSRMApi("admin", "Apple1995!", "https://ssrm-dev.securespaces.net")
     ad.gettoken()
     ad.getsession()
-    adlist = ad.listappads('com.v.study', 'packageName')
-    print("Count of ads: {}".format(adlist['count']))
-    for a in adlist['items']:
-        print(json.dumps(a, indent=4, ensure_ascii=False))
 
-    # for pgkname in rd.data:
-    #     ad.makeappad(pgkname, rd.data[pgkname])
+    # adlist = ad.listappads('com.v.study', 'packageName')
+    # print("Count of ads: {}".format(adlist['count']))
+    # for a in adlist['items']:
+    #     print(json.dumps(a, indent=4, ensure_ascii=False))
+
+    for pgkname in rd.data:
+        ad.makeappad(pgkname, rd.data[pgkname])
 
     ad.logoutsession()
 
