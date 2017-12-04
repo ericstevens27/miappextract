@@ -30,8 +30,8 @@ def main():
         appnum = arg.Flags.configsettings['applistnumber']
     if arg.Flags.test:
         appnum = "12"
-    writefile = rb.WriteJson(arg.Flags.configsettings['root'], arg.Flags.configsettings['data'],
-                             arg.Flags.configsettings['urlout'].format(appnum))
+    category_en = appnumlist[appnum].capitalize()
+    writefile = rb.WriteJson(arg.Flags.configsettings['root'], arg.Flags.configsettings['data'], arg.Flags.configsettings['urlout'].format(appnum))
     appURL = arg.Flags.configsettings['appurlbase'].format(appnum)
     msg.VERBOSE("Processing {} ({})".format(appURL, appnumlist[appnum]))
     foundmatch = False
@@ -42,6 +42,7 @@ def main():
 
     re_applist = r"(^<ul class=\"applist\">)"
     re_divdown = r"(^<div class=\"app-info-down\">)"
+    re_divintro = r"(^<div class=\"intro-titles\">)"
     re_hrefid = r"details\?id=(.*?)$"
     re_download = r"download/(.*?)$"
 
@@ -63,10 +64,13 @@ def main():
                 linkdata = lisoup.find_all('a')
                 packagename = extractgroup(re.search(re_hrefid, linkdata[1].get('href')))
                 desc = linkdata[1].text
+                category = linkdata[2].text
                 imgdata = lisoup.find_all('img')
                 src = imgdata[0].get('data-src')
-                msg.DEBUG("I found package {} ({}) with icon url of {}".format(packagename, desc, src))
-                packagedata[packagename] = {'description': desc, 'iconurl': src}
+                msg.DEBUG("I found package {} ({}) with icon url of {} in category {}".format(packagename, desc, src,
+                                                                                              category))
+                packagedata[packagename] = {'description': desc, 'iconurl': src, 'category_zh': category,
+                                            'category_en': category_en}
                 apprec += 1
                 if arg.Flags.verbose:
                     arg.displaycounter(["Pulling application"], [apprec])
@@ -76,9 +80,16 @@ def main():
         # go pull each page for each package
         detailsURL = arg.Flags.configsettings['appdetailsbaseurl'].format(pkgkey)
         status, response = http.request(detailsURL)
+        company = ''
         detailsoup = BeautifulSoup(response, 'html.parser')
         data = detailsoup.find_all("div")
         for e in data:
+            divcheck = extractgroup(re.search(re_divintro, str(e)))
+            if divcheck is not None:
+                msg.DEBUG("Found div intro in {}".format(e))
+                divsoup = BeautifulSoup(str(e), 'html.parser')
+                linkdata = divsoup.find_all('p')
+                company = linkdata[0].text
             divcheck = extractgroup(re.search(re_divdown, str(e)))
             if divcheck is not None:
                 msg.DEBUG("Found div download in {}".format(e))
@@ -86,8 +97,8 @@ def main():
                 linkdata = divsoup.find_all('a')
                 appid = extractgroup(re.search(re_download, linkdata[0].get('href')))
                 directURL = geturl(appid)
-                msg.DEBUG("I found {} for package {} and direct url of {}".format(appid, pkgkey, directURL))
-                packagedata[pkgkey].update({'appid': appid, 'directurl': directURL})
+                msg.DEBUG("I found {} for package {} (company: {}) and direct url of {}".format(appid, pkgkey, company, directURL))
+                packagedata[pkgkey].update({'appid': appid, 'directurl': directURL, 'company': company})
                 pkgcount += 1
                 if arg.Flags.verbose:
                     arg.displaycounter(["Processing redirection URL", "of"], [pkgcount, apprec])
