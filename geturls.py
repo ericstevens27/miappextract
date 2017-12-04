@@ -1,6 +1,5 @@
 from bs4 import BeautifulSoup
 import httplib2
-import json
 import re
 import readbase as rb
 import argbase as arg
