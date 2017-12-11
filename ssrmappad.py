@@ -214,7 +214,11 @@ class SSRMApi:
         msg.DEBUG("Checking for ad\n\tURL: {}\n\tHeaders: {}".format(actionURL, header))
         r = requests.get(actionURL, headers=header)
         if r.status_code == 200:
-            return True
+            result = json.loads(r.content.decode('utf-8'))
+            if result['count'] == 0:
+                return False
+            else:
+                return True
         else:
             return False
 
