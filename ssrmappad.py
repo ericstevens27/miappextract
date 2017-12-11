@@ -16,8 +16,9 @@ class SSRMApi:
         self.password = password
         self.ssrm = ssrmpath + '/api/v2/web/'
         self.xsrf_token = ''
+        self.nameprefix = "Xiaomi_"
         self.data = {
-            "adName": "Example App add",
+            "adName": "Xiaomi_Example App add",
             "content": [
                 {
                     "title": "Example App",
@@ -94,6 +95,7 @@ class SSRMApi:
         }
 
     def gettoken(self):
+        """get the session token - required for all other calls"""
         actionURL = self.ssrm + "security/login"
         authjson = { "username": self.user, "password": self.password }
         params = json.dumps(authjson).encode('utf8')
@@ -111,6 +113,7 @@ class SSRMApi:
             self.xsrf_token = r.json()['xsrfToken']
 
     def getsession(self):
+        """get the session info"""
         actionURL = self.ssrm + "security/currentSessionInfo"
         header = {'content-type': 'application/json', 'X-XSRF-TOKEN': self.xsrf_token}
         msg.DEBUG("\n\tURL: {}\n\tHeaders: {}".format(actionURL, header))
@@ -127,6 +130,7 @@ class SSRMApi:
         msg.DEBUG("User name is {}".format(rj['username']))
 
     def logoutsession(self):
+        """logout of the session"""
         actionURL = self.ssrm + "security/logout"
         header = {'content-type': 'application/json', 'X-XSRF-TOKEN': self.xsrf_token}
         msg.DEBUG("\n\tURL: {}\n\tHeaders: {}".format(actionURL, header))
@@ -142,6 +146,7 @@ class SSRMApi:
         rj = json.loads(r.content.decode('utf-8'))
 
     def listappads(self, name: str, field: str):
+        """returns a list of all ads based on the filter field search"""
         actionURL = self.ssrm + "app-ads?offset=0&limit=10"
         if name is not None:
             actionURL = actionURL + "&filter={}&filterField={}".format(name, field)
@@ -161,7 +166,9 @@ class SSRMApi:
         return rj
 
     def makeappad(self, pname, pdet):
-        self.data['adName'] = pname
+        """forms up the data fields needed to construct or update the ad"""
+        # Name is the prefix 'Xiaomi_' plus to package name to be unique
+        self.data['adName'] = self.nameprefix + pname
         self.data['category'] = pdet['category_en']
         self.data['advertiser'] = pdet['company']
         self.data['packageName'] = pname
@@ -179,10 +186,11 @@ class SSRMApi:
         self.pushappad()
 
     def pushappad(self):
+        """Checks for an ad with the same packname and if not then creates the ad"""
         msg.VERBOSE("Pushing ad {}".format(self.data['adName']))
-        if self.checkadexist(self.data['packageName']):
+        if self.checkadexist(self.data['adName']):
             # TODO insert Update code here
-            msg.VERBOSE("An ad for {} exists. Skipping creation".format(self.data['packageName']))
+            msg.VERBOSE("An ad for {} exists. Skipping creation".format(self.data['adName']))
         else:
             actionURL = self.ssrm + "app-ads"
             header = {'content-type': 'application/json', 'X-XSRF-TOKEN': self.xsrf_token}
@@ -200,7 +208,8 @@ class SSRMApi:
 
 
     def checkadexist(self, name: str):
-        actionURL = self.ssrm + "app-ads?offset=0&limit=10&filter={}&filterField={}".format(name, 'packageName')
+        """searches for an ad by the adName field which must be unique"""
+        actionURL = self.ssrm + "app-ads?offset=0&limit=10&filter={}&filterField={}".format(name, 'adName')
         header = {'content-type': 'application/json', 'X-XSRF-TOKEN': self.xsrf_token}
         msg.DEBUG("Checking for ad\n\tURL: {}\n\tHeaders: {}".format(actionURL, header))
         r = requests.get(actionURL, headers=header)
