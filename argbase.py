@@ -15,6 +15,7 @@ class Flags:
     macos = False
     error = False
     appid = None
+    update = False
     configsettings = {}
 
 
@@ -45,6 +46,8 @@ class MyArgs:
                           help="Use test number. Ignores appid flag")
         parser.add_option("-f", "--force", dest="force", action="store_true", default=False,
                           help="Force processing")
+        parser.add_option("-u", "--update", dest="update", action="store_true", default=False,
+                          help="Update ad records. Default is no updates.")
         parser.add_option("-a", "--appid", dest="appid", default=None,
                           help="Xiaomi App Id or App list Number to check", metavar="APPID")
         parser.add_option("-c", "--config", dest="config", default=None,
@@ -59,6 +62,7 @@ class MyArgs:
         Flags.test = options.test
         Flags.force = options.force
         Flags.appid = options.appid
+        Flags.update = options.update
         if _platform == "linux" or _platform == "linux2":
             # linux
             Flags.ubuntu = True

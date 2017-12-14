@@ -1,6 +1,9 @@
 {
   "root": ".",
   "data": "",
+  "username": "admin",
+  "password": "Apple1995!",
+  "serverurl": "https://ssrm-dev.securespaces.net",
   "urlout": "urllist_{}.json",
   "baseurl": "http://app.mi.com/download/{}",
   "appurlbase": "http://app.mi.com/hotCatApp/{}",
