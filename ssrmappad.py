@@ -176,47 +176,6 @@ class SSRMApi:
         else:
             return False
 
-    def getsession(self):
-        """get the session info"""
-        action = "getsession"
-        actionurl = self.ssrm + self.actionapi[action]
-        msg.DEBUG("\n\tURL: {}\n\tHeaders: {}".format(actionurl, self.tokenheader))
-        r = requests.get(actionurl, headers=self.tokenheader)
-        if self.checkstatus(r, action):
-            rj = json.loads(r.content.decode('utf-8'))
-            msg.DEBUG("User name is {}".format(rj['username']))
-            return rj
-        else:
-            return None
-
-    def logoutsession(self):
-        """logout of the session"""
-        action = "logout"
-        actionurl = self.ssrm + self.api[action]['api']
-        msg.DEBUG("\n\tURL: {}\n\tHeaders: {}".format(actionurl, self.tokenheader))
-        r = requests.post(actionurl, headers=self.tokenheader)
-        if self.checkstatus(r, action):
-            rj = json.loads(r.content.decode('utf-8'))
-            return rj
-        else:
-            return None
-
-    def listappads(self, name: str, field: str):
-        """returns a list of all ads based on the filter field search"""
-        action = "list"
-        actionurl = self.ssrm + self.api[action]['api']
-        if name is not None:
-            actionurl = actionurl + "&filter={}&filterField={}".format(name, field)
-            msg.VERBOSE("Searching for {} in {}".format(name, field))
-        msg.DEBUG("\n\tURL: {}\n\tHeaders: {}".format(actionurl, self.tokenheader))
-        msg.VERBOSE("{}".format(self.actiondesc[action]))
-        r = requests.get(actionurl, headers=self.tokenheader)
-        if self.checkstatus(r, action):
-            rj = json.loads(r.content.decode('utf-8'))
-            return rj
-        else:
-            return None
-
     def makeappad(self, pname, pdet):
         """forms up the data fields needed to construct or update the ad"""
         # Name is the prefix 'Xiaomi_' plus to package name to be unique
@@ -244,31 +203,37 @@ class SSRMApi:
         if adkey is not None:
             if arg.Flags.update:
                 # Update this ad
-                self.callssrm('update', adkey)
+                self.callssrm('update', adkey, '')
             else:
                 msg.VERBOSE(
                     "An ad for {} exists ({}). Update flag is false. Skipping creation".format(self.data['adName'],
                                                                                                adkey))
         else:
-            self.callssrm('create', '')
+            self.callssrm('create', '', '')
 
-    def callssrm(self, action, key):
+    def callssrm(self, action, key, field):
+        """general routine to call ssrm api using pre-defined actions and apis"""
         actionurl = self.ssrm + self.api[action]['api']
         if action == 'update':
             actionurl = actionurl + "/" + key
+        if action == 'list':
+            actionurl = actionurl + "&filter={}&filterField={}".format(key, field)
         msg.DEBUG("\n\tURL: {}\n\tjson: {}\n\tHeaders: {}".format(actionurl, self.data, self.tokenheader))
         msg.DEBUG("{} {}".format(self.api[action]['description'], self.data['adName']))
         r = None
         if self.api[action]['verb'] == 'post':
             r = requests.post(actionurl, json=self.data, headers=self.tokenheader)
         elif self.api[action]['verb'] == 'get':
-            r = requests.get(actionurl, json=self.data, headers=self.tokenheader)
+            r = requests.get(actionurl, headers=self.tokenheader)
         elif self.api[action]['verb'] == 'put':
             r = requests.put(actionurl, json=self.data, headers=self.tokenheader)
         else:
-            msg.ERROR("Invalid verb in internal structure. Cannot process {} verb: {}".format(action, self.api[action]['verb']))
-        self.checkstatus(r, action)
-
+            msg.ERROR("Invalid verb in internal structure. Cannot process {} verb: {}".format(action,
+                                                                                              self.api[action]['verb']))
+        if self.checkstatus(r, action):
+            return json.loads(r.content.decode('utf-8'))
+        else:
+            return None
 
     def checkstatus(self, r, action) -> bool:
         if str(r.status_code) in self.errcodes:
@@ -333,10 +298,16 @@ def main():
     ad = SSRMApi(arg.Flags.configsettings['username'], arg.Flags.configsettings['password'],
                  arg.Flags.configsettings['serverurl'])
     msg.VERBOSE("Starting Processing")
+
     if ad.gettoken():
-        for pgkname in rd.data:
-            ad.makeappad(pgkname, rd.data[pgkname])
-        ad.logoutsession()
+        res = ad.callssrm('list', 'Xiaomi', 'adName')
+        print(res['count'])
+        res = ad.callssrm('getsession', '', '')
+        print(res['username'])
+
+        # for pgkname in rd.data:
+        #     ad.makeappad(pgkname, rd.data[pgkname])
+        res = ad.callssrm('logout', '', '')
 
 
 if __name__ == '__main__':
