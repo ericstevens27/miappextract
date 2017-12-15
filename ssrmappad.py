@@ -17,6 +17,7 @@ class SSRMApi:
         self.ssrm = ssrmpath + '/api/v2/web/'
         self.xsrf_token = ''
         self.nameprefix = "Xiaomi_"
+        self.tokenheader = {'content-type': 'application/json', 'X-XSRF-TOKEN': ''}
         self.data = {
             "adName": "Xiaomi_example.app.ad",
             "content": [
@@ -93,13 +94,37 @@ class SSRMApi:
             "advertiser": "Graphite software",
             "packageName": "com.securespaces.package.name"
         }
-        self.actiondesc = {
-            "gettoken": "Get session token",
-            "getsession": "get session info",
-            "logout": "Logout",
-            "list": "List app ads",
-            "create": "Create app ad",
-            "update": "Update app ad"
+        self.api = {
+            "gettoken": {
+                "description": "Get session token",
+                "api": "security/login",
+                "verb": "post"
+            },
+            "getsession": {
+                "description": "Get session Info",
+                "api": "security/currentSessionInfo",
+                "verb": "get"
+            },
+            "logout": {
+                "description": "Logout",
+                "api": "security/logout",
+                "verb": "post"
+            },
+            "list": {
+                "description": "List app ads",
+                "api": "app-ads?offset=0&limit=10",
+                "verb": "get"
+            },
+            "create": {
+                "description": "Create app ad",
+                "api": "app-ads",
+                "verb": "post"
+            },
+            "update": {
+                "description": "Update app ad",
+                "api": "app-ads",
+                "verb": "put"
+            }
         }
         self.errcodes = {
             "200": {
@@ -139,15 +164,14 @@ class SSRMApi:
     def gettoken(self) -> bool:
         """get the session token - required for all other calls"""
         action = "gettoken"
-        actionurl = self.ssrm + "security/login"
+        actionurl = self.ssrm + self.api[action]['api']
         authjson = {"username": self.user, "password": self.password}
         header = {'content-type': 'application/json'}
         msg.DEBUG("\n\tURL: {}\n\tjson: {}\n\tHeaders: {}".format(actionurl, authjson, header))
-        # msg.VERBOSE("{}".format(self.actiondesc[action]))
         r = requests.post(actionurl, json=authjson, headers=header)
         if self.checkstatus(r, action):
-            rj = json.loads(r.content.decode('utf-8'))
             self.xsrf_token = r.json()['xsrfToken']
+            self.tokenheader['X-XSRF-TOKEN'] = self.xsrf_token
             return True
         else:
             return False
@@ -155,11 +179,9 @@ class SSRMApi:
     def getsession(self):
         """get the session info"""
         action = "getsession"
-        actionurl = self.ssrm + "security/currentSessionInfo"
-        header = {'content-type': 'application/json', 'X-XSRF-TOKEN': self.xsrf_token}
-        msg.DEBUG("\n\tURL: {}\n\tHeaders: {}".format(actionurl, header))
-        # msg.VERBOSE("{}".format(self.actiondesc[action]))
-        r = requests.get(actionurl, headers=header)
+        actionurl = self.ssrm + self.actionapi[action]
+        msg.DEBUG("\n\tURL: {}\n\tHeaders: {}".format(actionurl, self.tokenheader))
+        r = requests.get(actionurl, headers=self.tokenheader)
         if self.checkstatus(r, action):
             rj = json.loads(r.content.decode('utf-8'))
             msg.DEBUG("User name is {}".format(rj['username']))
@@ -170,11 +192,9 @@ class SSRMApi:
     def logoutsession(self):
         """logout of the session"""
         action = "logout"
-        actionurl = self.ssrm + "security/logout"
-        header = {'content-type': 'application/json', 'X-XSRF-TOKEN': self.xsrf_token}
-        msg.DEBUG("\n\tURL: {}\n\tHeaders: {}".format(actionurl, header))
-        # msg.VERBOSE("{}".format(self.actiondesc[action]))
-        r = requests.post(actionurl, headers=header)
+        actionurl = self.ssrm + self.api[action]['api']
+        msg.DEBUG("\n\tURL: {}\n\tHeaders: {}".format(actionurl, self.tokenheader))
+        r = requests.post(actionurl, headers=self.tokenheader)
         if self.checkstatus(r, action):
             rj = json.loads(r.content.decode('utf-8'))
             return rj
@@ -184,14 +204,13 @@ class SSRMApi:
     def listappads(self, name: str, field: str):
         """returns a list of all ads based on the filter field search"""
         action = "list"
-        actionurl = self.ssrm + "app-ads?offset=0&limit=10"
+        actionurl = self.ssrm + self.api[action]['api']
         if name is not None:
             actionurl = actionurl + "&filter={}&filterField={}".format(name, field)
             msg.VERBOSE("Searching for {} in {}".format(name, field))
-        header = {'content-type': 'application/json', 'X-XSRF-TOKEN': self.xsrf_token}
-        msg.DEBUG("\n\tURL: {}\n\tHeaders: {}".format(actionurl, header))
+        msg.DEBUG("\n\tURL: {}\n\tHeaders: {}".format(actionurl, self.tokenheader))
         msg.VERBOSE("{}".format(self.actiondesc[action]))
-        r = requests.get(actionurl, headers=header)
+        r = requests.get(actionurl, headers=self.tokenheader)
         if self.checkstatus(r, action):
             rj = json.loads(r.content.decode('utf-8'))
             return rj
@@ -205,12 +224,12 @@ class SSRMApi:
         self.data['category'] = pdet['category_en']
         self.data['advertiser'] = pdet['company']
         self.data['packageName'] = pname
-        self.data['content'][0]['title'] = pname[:30]   # title is limited to 30 characters
+        self.data['content'][0]['title'] = pname[:30]  # title is limited to 30 characters
         self.data['content'][0]['category'] = pdet['category_en']
         self.data['content'][0]['description'] = pname
         self.data['content'][0]['appStoreUris'][0]['uri'] = pdet['directurl']
         self.data['content'][0]['images'][2]['imageUri'] = pdet['iconurl']
-        self.data['content'][1]['title'] = pdet['description'][:30]     # title is limited to 30 characters
+        self.data['content'][1]['title'] = pdet['description'][:30]  # title is limited to 30 characters
         self.data['content'][1]['category'] = pdet['category_zh']
         self.data['content'][1]['description'] = pdet['description']
         self.data['content'][1]['appStoreUris'][0]['uri'] = pdet['directurl']
@@ -225,43 +244,43 @@ class SSRMApi:
         if adkey is not None:
             if arg.Flags.update:
                 # Update this ad
-                self.updatead(adkey)
+                self.callssrm('update', adkey)
             else:
-                msg.VERBOSE("An ad for {} exists ({}). Update flag is false. Skipping creation".format(self.data['adName'], adkey))
+                msg.VERBOSE(
+                    "An ad for {} exists ({}). Update flag is false. Skipping creation".format(self.data['adName'],
+                                                                                               adkey))
         else:
-            self.createad()
+            self.callssrm('create', '')
 
-    def createad(self):
-        """Creates the ad using the values in data"""
-        action = "create"
-        actionurl = self.ssrm + "app-ads"
-        header = {'content-type': 'application/json', 'X-XSRF-TOKEN': self.xsrf_token}
-        msg.DEBUG("\n\tURL: {}\n\tjson: {}\n\tHeaders: {}".format(actionurl, self.data, header))
-        msg.DEBUG("{} {}".format(self.actiondesc[action], self.data['adName']))
-        r = requests.post(actionurl, json=self.data, headers=header)
+    def callssrm(self, action, key):
+        actionurl = self.ssrm + self.api[action]['api']
+        if action == 'update':
+            actionurl = actionurl + "/" + key
+        msg.DEBUG("\n\tURL: {}\n\tjson: {}\n\tHeaders: {}".format(actionurl, self.data, self.tokenheader))
+        msg.DEBUG("{} {}".format(self.api[action]['description'], self.data['adName']))
+        r = None
+        if self.api[action]['verb'] == 'post':
+            r = requests.post(actionurl, json=self.data, headers=self.tokenheader)
+        elif self.api[action]['verb'] == 'get':
+            r = requests.get(actionurl, json=self.data, headers=self.tokenheader)
+        elif self.api[action]['verb'] == 'put':
+            r = requests.put(actionurl, json=self.data, headers=self.tokenheader)
+        else:
+            msg.ERROR("Invalid verb in internal structure. Cannot process {} verb: {}".format(action, self.api[action]['verb']))
         self.checkstatus(r, action)
 
-    def updatead(self, key):
-        """Updates the ad using the key with values in data"""
-        action = "update"
-        actionurl = self.ssrm + "app-ads/" + key
-        header = {'content-type': 'application/json', 'X-XSRF-TOKEN': self.xsrf_token}
-        msg.DEBUG("\n\tURL: {}\n\tjson: {}\n\tHeaders: {}".format(actionurl, self.data, header))
-        msg.DEBUG("{} {}".format(self.actiondesc[action], self.data['adName']))
-        r = requests.put(actionurl, json=self.data, headers=header)
-        self.checkstatus(r, action)
 
     def checkstatus(self, r, action) -> bool:
         if str(r.status_code) in self.errcodes:
             if r.status_code == 200:
-                msg.VERBOSE("{} {}".format(self.actiondesc[action],
+                msg.VERBOSE("{} {}".format(self.api[action]['description'],
                                            self.errcodes[str(r.status_code)][action]))
             else:
-                msg.VERBOSE("{} {} [HTTP Response: {}]".format(self.actiondesc[action],
+                msg.VERBOSE("{} {} [HTTP Response: {}]".format(self.api[action]['description'],
                                                                self.errcodes[str(r.status_code)][action],
                                                                r.status_code))
         else:
-            msg.VERBOSE("{} {} [HTTP Response: {}]".format(self.actiondesc[action],
+            msg.VERBOSE("{} {} [HTTP Response: {}]".format(self.api[action]['description'],
                                                            self.errcodes['other'][action],
                                                            r.status_code))
         if r.status_code == 200:
@@ -272,9 +291,8 @@ class SSRMApi:
     def checkadexist(self, name: str) -> bool:
         """searches for an ad by the adName field which must be unique"""
         actionurl = self.ssrm + "app-ads?offset=0&limit=10&filter={}&filterField={}".format(name, 'adName')
-        header = {'content-type': 'application/json', 'X-XSRF-TOKEN': self.xsrf_token}
-        msg.DEBUG("Checking for ad\n\tURL: {}\n\tHeaders: {}".format(actionurl, header))
-        r = requests.get(actionurl, headers=header)
+        msg.DEBUG("Checking for ad\n\tURL: {}\n\tHeaders: {}".format(actionurl, self.tokenheader))
+        r = requests.get(actionurl, headers=self.tokenheader)
         if r.status_code == 200:
             result = json.loads(r.content.decode('utf-8'))
             if result['count'] != 1:
@@ -288,9 +306,8 @@ class SSRMApi:
     def getad(self, name: str):
         """searches for an ad by the adName field which must be unique"""
         actionurl = self.ssrm + "app-ads?offset=0&limit=10&filter={}&filterField={}".format(name, 'adName')
-        header = {'content-type': 'application/json', 'X-XSRF-TOKEN': self.xsrf_token}
-        msg.DEBUG("Checking for ad\n\tURL: {}\n\tHeaders: {}".format(actionurl, header))
-        r = requests.get(actionurl, headers=header)
+        msg.DEBUG("Checking for ad\n\tURL: {}\n\tHeaders: {}".format(actionurl, self.tokenheader))
+        r = requests.get(actionurl, headers=self.tokenheader)
         if r.status_code == 200:
             result = json.loads(r.content.decode('utf-8'))
             if result['count'] != 1:
@@ -313,7 +330,8 @@ def main():
     applistfile = arg.Flags.configsettings['urlout'].format(arg.Flags.configsettings['applistnumber'])
     rd = rb.ReadJson(arg.Flags.configsettings['root'], arg.Flags.configsettings['data'], applistfile)
     rd.readinput()
-    ad = SSRMApi(arg.Flags.configsettings['username'], arg.Flags.configsettings['password'], arg.Flags.configsettings['serverurl'])
+    ad = SSRMApi(arg.Flags.configsettings['username'], arg.Flags.configsettings['password'],
+                 arg.Flags.configsettings['serverurl'])
     msg.VERBOSE("Starting Processing")
     if ad.gettoken():
         for pgkname in rd.data:
