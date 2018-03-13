@@ -2,7 +2,7 @@
   "root": ".",
   "data": "",
   "username": "admin",
-  "password": "Apple1995!",
+  "password": "",
   "serverurl": "https://ssrm-dev.securespaces.net",
   "urlout": "urllist_{}.json",
   "baseurl": "http://app.mi.com/download/{}",
